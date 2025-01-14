@@ -18,12 +18,12 @@ class TodoController {
     }
 
     @GetMapping
-    List<Todo> getAll() {
-        return todoService.getAll();
+    List<Todo> getAll() {return todoService.getAll();
     }
 
     @PostMapping
     Todo postTodo(@RequestBody Todo todo) {
+        System.out.println("getsToPost");
         return todoService.save(todo);
     }
 

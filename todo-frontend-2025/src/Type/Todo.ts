@@ -1,0 +1,1 @@
+export type TODO={id:string,description:string,status:string}

@@ -1,0 +1,18 @@
+.to-do-card{
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    display: flow;
+    justify-content: center;
+    padding: 10px;
+    gap: 10px;
+}
+.butt {
+    background-color: darkslategray;
+
+}
+.buttbox{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+
+}
