@@ -33,7 +33,7 @@ function fetchData(){
 
         </header>
         <main>
-        <ToDoGallery  todos={data}    />
+        <ToDoGallery  todos={data} fetchData={fetchData}   />
         </main>
 
 

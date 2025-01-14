@@ -1,13 +1,13 @@
 import {TODO} from "../Type/Todo.ts";
 import ToDoCard from "./ToDoCard.tsx";
 import "./ToDoGallery.css"
-export default function ToDoGallery({ todos }:{ todos:TODO[] }){
+export default function ToDoGallery({ todos,fetchData }:{ todos:TODO[],fetchData:()=>void }){
    const openTodos:TODO[]= todos.filter((todo:TODO)=>todo.status==="OPEN")
     const closeTodos:TODO[]= todos.filter((todo:TODO)=>todo.status==="DONE")
     const inPTodos:TODO[]= todos.filter((todo:TODO)=>todo.status==="IN_PROGRESS")
-     const Ocards= openTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo}/>)
-    const IPcards=inPTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo}/>)
-    const cCards=closeTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo}/>)
+     const Ocards= openTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo}fetchData={fetchData}/>)
+    const IPcards=inPTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo}fetchData={fetchData}/>)
+    const cCards=closeTodos.map((todo:TODO)=><ToDoCard key={todo.id} todo={todo} fetchData={fetchData}/>)
 
 
 return <>

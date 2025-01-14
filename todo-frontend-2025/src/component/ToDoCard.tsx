@@ -6,10 +6,11 @@ import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 
 type todoProps={
-    todo:TODO
+    todo:TODO,
+    fetchData:()=>void
 }
 function OnDelete(todo:string) {
-    axios.delete("api/todo/"+todo)
+
 }
 
 export default function ToDoCard(todo:todoProps){
@@ -83,7 +84,8 @@ export default function ToDoCard(todo:todoProps){
             status: status
 
 
-        }).then(()=>console.log("suss")).catch((error)=>{console.log(error)})
+        }).then(()=>{
+           todo.fetchData();}).catch((error)=>{console.log(error)})
     }
 
 
@@ -100,7 +102,7 @@ export default function ToDoCard(todo:todoProps){
         <button className="butt" disabled={!upIsP}
                 onClick={() => updateTodo(todo.todo,true)}>next</button>
         </div>
-            <button onClick={()=>OnDelete(todo.todo.id)}>delete</button>
+            <button onClick={()=>{axios.delete("api/todo/"+todo.todo.id).then(()=>{todo.fetchData()})}}>delete</button>
    </div>
     )
 }
