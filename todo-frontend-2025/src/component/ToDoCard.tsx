@@ -2,15 +2,12 @@ import {TODO} from "../Type/Todo.ts";
 import "./ToDoCard.css"
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+
+
 
 type todoProps={
     todo:TODO,
     fetchData:()=>void
-}
-function OnDelete(todo:string) {
-
 }
 
 export default function ToDoCard(todo:todoProps){
