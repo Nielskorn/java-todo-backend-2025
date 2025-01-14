@@ -1,16 +1,44 @@
 import {TODO} from "../Type/Todo.ts";
 import "./ToDoCard.css"
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 type todoProps={
     todo:TODO
 }
+function OnDelete(todo:string) {
+    axios.delete("api/todo/"+todo)
+}
+
 export default function ToDoCard(todo:todoProps){
 //console.log(todo.todo.status)
+    useEffect(()=>initStatus(todo.todo),[])
     let status:string="OPEN"
-   const [upIsP,setUpIsP]=useState<boolean>(true);
-   const [downIsP,setDownIsP]=useState<boolean>(false);
+   const [upIsP,setUpIsP]=useState<boolean>();
+   const [downIsP,setDownIsP]=useState<boolean>();
+   function  initStatus(todo:TODO){
+       switch( todo.status){
+           case 'OPEN':
+                   setDownIsP(false)
+                   setUpIsP(true)
+
+               break
+           case 'DONE':
+               setUpIsP(false)
+               setDownIsP(true)
+               break
+           case 'IN_PROGRESS':
+               setUpIsP(true)
+               setDownIsP(true)
+               break
+           default:
+               console.log("if this is visable somrthing wrong")
+               break;
+       }
+   }
+
     function updateStatus(todo:TODO,up:boolean){
 
         switch( todo.status){
@@ -20,49 +48,59 @@ export default function ToDoCard(todo:todoProps){
                     setDownIsP(true)
                     setUpIsP(true)
                 }
-            break
-            case 'CLOSE':
+                break
+            case 'IN_PROGRESS':
+                if(up){
+                    status="DONE"
+                    setUpIsP(false)
+                    setDownIsP(true)
+                }
+                else {
+                    status="OPEN"
+                    setDownIsP(false)
+                }
+                break
+            case 'DONE':
                 if(!up){
                     status='IN_PROGRESS'
                     setUpIsP(true)
                     setDownIsP(true)
                 }
                 break
-            case 'IN_PROGRESS':
-                if(up){
-                    status="CLOSE"
-                    setUpIsP(false)
-                }
-                else {
-                  status="OPEN"
-                    setDownIsP(false)
-                }
 
-                break
-             default:
+
+
+            default:
                 console.log("if this is visable somrthing wrong")
                 break;
         }
     }
-    function updateTodo(Todo:TODO){
-        axios.put("api/todo/",{
+    function updateTodo(Todo:TODO,upflag:boolean){
+        updateStatus(Todo,upflag)
+        axios.put("api/todo/"+Todo.id,{
             description: Todo.description,
             id: Todo.id,
             status: status
 
 
-        })
+        }).then(()=>console.log("suss")).catch((error)=>{console.log(error)})
     }
-    return <div className="to-do-card">
+
+
+
+
+
+    return (<div className="to-do-card">
         <h2>{todo.todo.description}</h2>
         <p>status: {todo.todo.status}</p>
         <div className="buttbox">
         <button className="butt" disabled={!downIsP}
-                onClick={() =>{updateStatus{todo,false}
-                updateTodo}>perivios</button>
+                onClick={() =>updateTodo(todo.todo,false)}
+                >perivios</button>
         <button className="butt" disabled={!upIsP}
-                onClick={() => {updateStatus{,false}
-        updateTodo{todo.todo}}>next</button>
+                onClick={() => updateTodo(todo.todo,true)}>next</button>
         </div>
-        <></>
-    </div>
+            <button onClick={()=>OnDelete(todo.todo.id)}>delete</button>
+   </div>
+    )
+}
